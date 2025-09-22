@@ -17,4 +17,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+
+    // Users
+    Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+
+    // Categories
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+});
+
 require __DIR__.'/auth.php';
