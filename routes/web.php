@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Teacher\CourseController;
+use App\Http\Controllers\Teacher\LessonController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,5 +30,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
 });
+
+Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::resource('courses', CourseController::class);
+    Route::get('courses/{course}/lessons/create', [LessonController::class, 'create'])->name('lessons.create');
+    Route::post('courses/{course}/lessons', [LessonController::class, 'store'])->name('lessons.store');
+});
+
 
 require __DIR__.'/auth.php';
