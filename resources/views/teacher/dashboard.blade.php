@@ -6,7 +6,7 @@
         <p>Welcome, {{ $teacher->name }} 👋</p>
 
         <div class="mt-4">
-            <a href="{{ route('courses.create') }}" class="btn btn-primary">➕ Add New Course</a>
+            <a href="{{ route('teacher.courses.create') }}" class="btn btn-primary">➕ Add New Course</a>
         </div>
 
         <h2 class="mt-5">My Courses</h2>
@@ -29,21 +29,23 @@
                         <td>{{ $course->title }}</td>
                         <td>{{ $course->lessons->count() }}</td>
                         <td>
-                            @if($course->is_approved)
+                            @if(isset($course->is_approved) && $course->is_approved)
                                 ✅ Approved
                             @else
                                 ⏳ Pending Approval
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-sm btn-info">View</a>
-                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                            <form action="{{ route('courses.destroy', $course->id) }}" method="POST" class="d-inline">
+                            <a href="{{ route('teacher.courses.show', $course->id) }}" class="btn btn-sm btn-info">View</a>
+                            <a href="{{ route('teacher.courses.edit', $course->id) }}" class="btn btn-sm btn-warning">Edit</a>
+
+                            <form action="{{ route('teacher.courses.destroy', $course->id) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this course?')">Delete</button>
                             </form>
-                            <a href="{{ route('lessons.create', $course->id) }}" class="btn btn-sm btn-success">+ Add Lesson</a>
+
+                            <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-sm btn-success">+ Add Lesson</a>
                         </td>
                     </tr>
                 @endforeach
@@ -52,4 +54,3 @@
         @endif
     </div>
 @endsection
-

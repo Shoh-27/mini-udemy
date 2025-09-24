@@ -22,8 +22,8 @@ class LessonController extends Controller
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:51200', // max 50MB
+            'content' => 'nullable|string', // 🔄 content o‘rniga description
+            'video' => 'nullable|mimes:mp4,mov,avi,wmv,webm,ogg|max:51200', // 50MB
         ]);
 
         if ($request->hasFile('video')) {
@@ -49,8 +49,8 @@ class LessonController extends Controller
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'nullable|string',
-            'video' => 'nullable|mimes:mp4,mov,avi,wmv|max:51200',
+            'description' => 'nullable|string',
+            'video' => 'nullable|mimes:mp4,mov,avi,wmv,webm,ogg|max:51200',
         ]);
 
         if ($request->hasFile('video')) {
