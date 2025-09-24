@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\LessonController;
+use App\Http\Controllers\TeacherDashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,6 +31,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
 });
+
+
+Route::middleware(['auth', 'role:teacher'])->group(function () {
+    Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
+});
+
 
 Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::resource('courses', CourseController::class);
