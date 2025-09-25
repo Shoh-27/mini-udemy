@@ -38,3 +38,28 @@ Bu loyiha — **boshlovchi dasturchilar uchun step-by-step kurs loyihasi**, kich
    git clone https://github.com/<username>/<repo>.git
    cd <repo>
 
+## Composer install:
+- composer install
+
+
+## .env faylini sozlang va keyin:
+- php artisan key:generate
+- php artisan migrate --seed
+- php artisan storage:link
+
+
+## Serverni ishga tushiring:
+- php artisan serve
+
+🔮 Keyingi bosqichlar (reja)
+
+Admin tomonidan kurslarni approve qilishni to‘liq tugatish.
+
+Student uchun kurslarni ko‘rish va darslarni tomosha qilish.
+
+Sotib olish (dummy payment → Stripe/Payme integratsiya).
+
+Progress tracking, review va chat funksiyalari.
+
+👨‍💻 Author: [Sizning ismingiz]
+
