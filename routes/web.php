@@ -31,15 +31,21 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     // Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+});
 
+
+Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/courses', [AdminCourseController::class, 'index'])->name('courses.index');
     Route::patch('/courses/{course}/approve', [AdminCourseController::class, 'approve'])->name('courses.approve');
     Route::patch('/courses/{course}/reject', [AdminCourseController::class, 'reject'])->name('courses.reject');
 });
 
+
+
 Route::middleware(['auth', 'role:teacher'])->group(function () {
     Route::get('/teacher/dashboard', [TeacherDashboardController::class, 'index'])->name('teacher.dashboard');
 });
+
 
 Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
     Route::resource('courses', CourseController::class);

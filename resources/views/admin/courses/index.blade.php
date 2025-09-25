@@ -13,6 +13,7 @@
                     </span>
                     </h5>
                     <p>{{ $course->description }}</p>
+                    <a href="{{ route('teacher.courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
                     <p><strong>Teacher:</strong> {{ $course->user->name }}</p>
 
                     @if($course->status == 'pending')
