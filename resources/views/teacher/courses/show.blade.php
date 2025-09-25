@@ -19,7 +19,7 @@
             <div class="card mb-3 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">{{ $lesson->title }}</h5>
-                    <p class="card-text">{{ $lesson->content }}</p>
+                    <p class="card-text">{{ $lesson->description }}</p>
 
                     @if($lesson->video)
                         <video width="500px" height="500px" controls class="mt-2 rounded">
