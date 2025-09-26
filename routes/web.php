@@ -5,6 +5,7 @@ use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\LessonController;
 use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\TeacherDashboardController;
+use App\Http\Controllers\Student\StudentCourseController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,11 +32,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
 
     // Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
+    Route::get('/courses', [AdminCourseController::class, 'index'])->name('courses.index');
 });
 
 
 Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/courses', [AdminCourseController::class, 'index'])->name('courses.index');
     Route::patch('/courses/{course}/approve', [AdminCourseController::class, 'approve'])->name('courses.approve');
     Route::patch('/courses/{course}/reject', [AdminCourseController::class, 'reject'])->name('courses.reject');
 });
@@ -55,6 +56,14 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
     Route::put('lessons/{lesson}', [LessonController::class, 'update'])->name('lessons.update');
     Route::delete('lessons/{lesson}', [LessonController::class, 'destroy'])->name('lessons.destroy');
 });
+
+Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
+    Route::get('/dashboard', [StudentCourseController::class, 'dashboard'])->name('dashboard');
+    Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
+    Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');
+    Route::get('/lessons/{lesson}', [StudentCourseController::class, 'lesson'])->name('lessons.show');
+});
+
 
 
 require __DIR__.'/auth.php';

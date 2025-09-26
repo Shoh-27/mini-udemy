@@ -39,6 +39,11 @@
                         </form>
                     </td>
                 </tr>
+                <td>
+                    <span class="badge bg-{{ $course->status == 'approved' ? 'success' : ($course->status == 'rejected' ? 'danger' : 'warning') }}">
+                                {{ ucfirst($course->status) }}
+                    </span>
+                </td>
             @empty
                 <tr><td colspan="5">No courses yet.</td></tr>
             @endforelse
