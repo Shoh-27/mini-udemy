@@ -5,10 +5,17 @@
         <h1>Available Courses</h1>
         <ul class="list-group">
             @foreach($courses as $course)
-                <li class="list-group-item">
-                    <a href="{{ route('courses.show', $course->id) }}">{{ $course->title }}</a>
-                </li>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $course->title }}</h5>
+                        <p class="card-text">{{ Str::limit($course->description, 100) }}</p>
+                        <a href="{{ route('student.courses.show', $course->id) }}" class="btn btn-primary">
+                            View Course
+                        </a>
+                    </div>
+                </div>
             @endforeach
+
         </ul>
     </div>
 @endsection

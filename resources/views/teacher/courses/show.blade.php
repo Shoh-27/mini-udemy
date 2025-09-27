@@ -10,6 +10,18 @@
             <img src="{{ asset('storage/' . $course->image) }}" width="200" class="mb-3 rounded shadow">
         @endif
 
+        {{-- ✅ Student uchun Enroll tugmasi --}}
+        @role('student')
+        @if(!$course->students->contains(auth()->id()))
+            <form action="{{ route('student.courses.enroll', $course->id) }}" method="POST" class="mb-3">
+                @csrf
+                <button type="submit" class="btn btn-success">📚 Enroll Course</button>
+            </form>
+        @else
+            <p class="text-success">✅ Siz bu kursga yozilgansiz</p>
+        @endif
+        @endrole
+
         <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
             <h4>Lessons ({{ $course->lessons->count() }})</h4>
 

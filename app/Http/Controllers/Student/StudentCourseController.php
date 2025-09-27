@@ -24,29 +24,27 @@ class StudentCourseController extends Controller
      */
     public function show(Course $course)
     {
-        // agar kurs approved bo‘lmasa student ko‘ra olmaydi
+        // faqat approved kurslarga kirish mumkin
         if ($course->status !== 'approved') {
-            abort(403, 'This course is not available.');
+            abort(403, 'This course is not available for students.');
         }
 
-        $lessons = $course->lessons;
-
-        return view('student.courses.show', compact('course', 'lessons'));
+        return view('student.courses.show', compact('course'));
     }
 
-    public function lesson(Course $course, Lesson $lesson)
-    {
-        if ($course->status !== 'approved') {
-            abort(403, 'This course is not available.');
-        }
-
-        // dars shu kursga tegishli bo‘lmasa 404 chiqsin
-        if ($lesson->course_id !== $course->id) {
-            abort(404, 'Lesson not found in this course.');
-        }
-
-        return view('student.courses.lesson', compact('course', 'lesson'));
-    }
+//    public function lesson(Course $course, Lesson $lesson)
+//    {
+//        if ($course->status !== 'approved') {
+//            abort(403, 'This course is not available.');
+//        }
+//
+//        // dars shu kursga tegishli bo‘lmasa 404 chiqsin
+//        if ($lesson->course_id !== $course->id) {
+//            abort(404, 'Lesson not found in this course.');
+//        }
+//
+//        return view('student.courses.lesson', compact('course', 'lesson'));
+//    }
 
     public function enroll(Course $course)
     {
@@ -54,7 +52,7 @@ class StudentCourseController extends Controller
 
         // Agar oldin yozilgan bo‘lsa
         if ($user->enrollments()->where('course_id', $course->id)->exists()) {
-            return redirect()->route('student.courses.show', $course->id)
+            return redirect()->route('courses.show', $course->id)
                 ->with('info', 'Siz allaqachon bu kursga yozilgansiz.');
         }
 
@@ -64,7 +62,7 @@ class StudentCourseController extends Controller
             'status' => 'active',
         ]);
 
-        return redirect()->route('student.courses.show', $course->id)
+        return redirect()->route('courses.show', $course->id)
             ->with('success', 'Kursga muvaffaqiyatli yozildingiz!');
     }
 

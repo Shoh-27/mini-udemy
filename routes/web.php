@@ -60,8 +60,9 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
     Route::get('/dashboard', [StudentCourseController::class, 'dashboard'])->name('dashboard');
     Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
-//    Route::get('/courses/{course}', [StudentCourseController::class, 'show'])->name('courses.show');
-    Route::get('/lessons/{lesson}', [StudentCourseController::class, 'lesson'])->name('lessons.show');
+    Route::get('/courses/{course}', [\App\Http\Controllers\Student\StudentCourseController::class, 'show'])->name('courses.show');
+    Route::post('/courses/{course}/enroll', [StudentCourseController::class, 'enroll'])
+        ->name('courses.enroll');
 });
 
 Route::middleware(['auth', 'role:student|admin'])->group(function () {
