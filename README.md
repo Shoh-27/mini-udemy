@@ -35,8 +35,8 @@ Bu loyiha — **boshlovchi dasturchilar uchun step-by-step kurs loyihasi**, kich
 
 1. Repository’ni clone qiling:
    ```bash
-   git clone https://github.com/<username>/<repo>.git
-   cd <repo>
+   git clone https://github.com/
+   cd 
 
 ## Composer install:
 - composer install
