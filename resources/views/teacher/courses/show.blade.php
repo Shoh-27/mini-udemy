@@ -12,7 +12,10 @@
 
         <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
             <h4>Lessons ({{ $course->lessons->count() }})</h4>
+
+            @role('teacher')
             <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-primary">➕ Add Lesson</a>
+            @endrole
         </div>
 
         @forelse($course->lessons as $lesson)
@@ -28,6 +31,7 @@
                         </video>
                     @endif
 
+                    @role('teacher')
                     <div class="mt-3">
                         <a href="{{ route('teacher.lessons.edit', $lesson->id) }}" class="btn btn-warning btn-sm">✏️ Edit</a>
                         <form action="{{ route('teacher.lessons.destroy', $lesson->id) }}" method="POST" class="d-inline">
@@ -35,6 +39,7 @@
                             <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this lesson?')">🗑️ Delete</button>
                         </form>
                     </div>
+                    @endrole
                 </div>
             </div>
         @empty

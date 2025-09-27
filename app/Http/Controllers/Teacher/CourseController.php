@@ -86,8 +86,17 @@ class CourseController extends Controller
 
     private function authorizeCourse(Course $course)
     {
-        if ($course->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
+        // Teacher faqat o'z kursini ko‘ra oladi
+        if (auth()->user()->hasRole('teacher') && $course->user_id !== auth()->id()) {
+            abort(403);
         }
+
+        // Student va Admin kursni ko‘ra oladi
+        if (auth()->user()->hasAnyRole(['student', 'admin'])) {
+            return true;
+        }
+
+        abort(403);
     }
+
 }

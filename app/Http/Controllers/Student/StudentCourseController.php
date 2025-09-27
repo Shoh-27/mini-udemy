@@ -8,31 +8,43 @@ use App\Models\Lesson;
 
 class StudentCourseController extends Controller
 {
-    public function dashboard()
-    {
-        return view('student.dashboard');
-    }
-
+    /**
+     * Show all approved courses for students.
+     */
     public function index()
     {
-        $courses = Course::where('status == approved', true)->get();
+        // faqat admin tasdiqlagan kurslarni olish
+        $courses = Course::where('status', 'approved')->get();
+
         return view('student.courses.index', compact('courses'));
     }
 
+    /**
+     * Show a single approved course with lessons.
+     */
     public function show(Course $course)
     {
-        if (!$course->approved) {
+        // agar kurs approved bo‘lmasa student ko‘ra olmaydi
+        if ($course->status !== 'approved') {
             abort(403, 'This course is not available.');
         }
+
         $lessons = $course->lessons;
+
         return view('student.courses.show', compact('course', 'lessons'));
     }
 
-    public function lesson(Lesson $lesson)
+    public function lesson(Course $course, Lesson $lesson)
     {
-        if (!$lesson->course->approved) {
-            abort(403, 'This lesson is not available.');
+        if ($course->status !== 'approved') {
+            abort(403, 'This course is not available.');
         }
-        return view('student.lessons.show', compact('lesson'));
+
+        // dars shu kursga tegishli bo‘lmasa 404 chiqsin
+        if ($lesson->course_id !== $course->id) {
+            abort(404, 'Lesson not found in this course.');
+        }
+
+        return view('student.courses.lesson', compact('course', 'lesson'));
     }
 }
