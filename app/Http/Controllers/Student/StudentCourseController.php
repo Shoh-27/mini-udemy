@@ -15,13 +15,13 @@ class StudentCourseController extends Controller
 
     public function index()
     {
-        $courses = Course::where('is_approved', true)->get();
+        $courses = Course::where('status == approved', true)->get();
         return view('student.courses.index', compact('courses'));
     }
 
     public function show(Course $course)
     {
-        if (!$course->is_approved) {
+        if (!$course->approved) {
             abort(403, 'This course is not available.');
         }
         $lessons = $course->lessons;
@@ -30,7 +30,7 @@ class StudentCourseController extends Controller
 
     public function lesson(Lesson $lesson)
     {
-        if (!$lesson->course->is_approved) {
+        if (!$lesson->course->approved) {
             abort(403, 'This lesson is not available.');
         }
         return view('student.lessons.show', compact('lesson'));
