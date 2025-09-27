@@ -7,6 +7,7 @@ use App\Http\Controllers\Teacher\LessonController;
 use App\Http\Controllers\Admin\CourseController as AdminCourseController;
 use App\Http\Controllers\TeacherDashboardController;
 use App\Http\Controllers\Student\StudentCourseController;
+use App\Http\Controllers\TeacherRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,8 +22,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/teacher-request', [TeacherRequestController::class, 'store'])
+        ->name('teacher.request.store');
+});
+
+// Faqat admin ko‘radi
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/teacher-requests', [TeacherRequestController::class, 'index'])
+        ->name('admin.teacher.requests');
+    Route::post('/admin/teacher-requests/{id}/approve', [TeacherRequestController::class, 'approve'])
+        ->name('admin.teacher.requests.approve');
+    Route::post('/admin/teacher-requests/{id}/reject', [TeacherRequestController::class, 'reject'])
+        ->name('admin.teacher.requests.reject');
+});
+
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     // Users
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
@@ -56,7 +72,7 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
 });
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\StudentDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [\App\Http\Controllers\StudentDashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [\App\Http\Controllers\Student\StudentCourseController::class, 'show'])->name('courses.show');
     Route::post('/courses/{course}/enroll', [StudentCourseController::class, 'enroll'])

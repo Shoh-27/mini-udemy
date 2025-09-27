@@ -22,5 +22,12 @@
             <p class="text-muted">Siz hali birorta kursga yozilmagansiz.</p>
         @endforelse
     </div>
+
+    <form action="{{ route('teacher.request.store') }}" method="POST">
+        @csrf
+        <textarea name="reason" placeholder="Nima uchun teacher bo‘lishni xohlaysiz?" required></textarea>
+        <button type="submit">Teacher bo‘lish uchun sorov yuborish</button>
+    </form>
+
 @endsection
 

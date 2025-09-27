@@ -8,6 +8,13 @@
             <li><a href="{{ route('categories.index') }}">Categories</a></li>
             <li><a href="{{ route('courses.index') }}">Courses: {{ $stats['total_courses'] }}</a></li>
         </ul>
+        <div class="bg-white p-6 shadow rounded mt-6">
+            <h3 class="text-lg font-semibold mb-4">🔗 Useful Links</h3>
+            <a href="{{ route('admin.teacher.requests') }}"
+               class="bg-blue-500 text-white px-4 py-2 rounded">
+                📩 Teacher Requests
+            </a>
+        </div>
         <div class="row mb-4">
             <div class="col-md-2">Enrollments: {{ $stats['total_enrollments'] }}</div>
         </div>
