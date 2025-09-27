@@ -35,8 +35,8 @@ Bu loyiha — **boshlovchi dasturchilar uchun step-by-step kurs loyihasi**, kich
 
 1. Repository’ni clone qiling:
    ```bash
-   git clone https://github.com/
-   cd 
+   git clone [https://github.com/](https://github.com/Shoh-27/mini-udemy.git)
+   cd mini-udemy
 
 ## Composer install:
 - composer install
@@ -61,5 +61,5 @@ Sotib olish (dummy payment → Stripe/Payme integratsiya).
 
 Progress tracking, review va chat funksiyalari.
 
-👨‍💻 Author: [Sizning ismingiz]
+👨‍💻 Author: [Nizomov Shohrux]
 
