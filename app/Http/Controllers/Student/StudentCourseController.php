@@ -47,4 +47,25 @@ class StudentCourseController extends Controller
 
         return view('student.courses.lesson', compact('course', 'lesson'));
     }
+
+    public function enroll(Course $course)
+    {
+        $user = auth()->user();
+
+        // Agar oldin yozilgan bo‘lsa
+        if ($user->enrollments()->where('course_id', $course->id)->exists()) {
+            return redirect()->route('student.courses.show', $course->id)
+                ->with('info', 'Siz allaqachon bu kursga yozilgansiz.');
+        }
+
+        // Yangi enrollment
+        $user->enrollments()->create([
+            'course_id' => $course->id,
+            'status' => 'active',
+        ]);
+
+        return redirect()->route('student.courses.show', $course->id)
+            ->with('success', 'Kursga muvaffaqiyatli yozildingiz!');
+    }
+
 }
