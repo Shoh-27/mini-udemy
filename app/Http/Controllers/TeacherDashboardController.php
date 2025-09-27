@@ -10,7 +10,11 @@ class TeacherDashboardController extends Controller
     public function index()
     {
         $teacher = Auth::user();
-        $courses = $teacher->courses()->with('lessons')->get();
+
+        // Teacher kurslari, ular bilan birga lessons va enrollments (student bilan)
+        $courses = $teacher->courses()
+            ->with(['lessons', 'enrollments.student'])
+            ->get();
 
         return view('teacher.dashboard', compact('teacher', 'courses'));
     }

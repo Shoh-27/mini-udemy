@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lesson;
+use Illuminate\Support\Facades\Auth;
 
 class StudentCourseController extends Controller
 {
@@ -32,19 +33,20 @@ class StudentCourseController extends Controller
         return view('student.courses.show', compact('course'));
     }
 
-//    public function lesson(Course $course, Lesson $lesson)
-//    {
-//        if ($course->status !== 'approved') {
-//            abort(403, 'This course is not available.');
-//        }
-//
-//        // dars shu kursga tegishli bo‘lmasa 404 chiqsin
-//        if ($lesson->course_id !== $course->id) {
-//            abort(404, 'Lesson not found in this course.');
-//        }
-//
-//        return view('student.courses.lesson', compact('course', 'lesson'));
-//    }
+    public function lesson(Course $course, Lesson $lesson)
+    {
+        // Student kursga enroll bo‘lganmi?
+        if (!$course->students()->where('user_id', Auth::id())->exists()) {
+            abort(403, 'Siz bu kursga yozilmagansiz.');
+        }
+
+        // Lesson shu kursga tegishli bo‘lishini tekshiramiz
+        if ($lesson->course_id !== $course->id) {
+            abort(404, 'Bunday dars topilmadi.');
+        }
+
+        return view('student.courses.lesson', compact('course', 'lesson'));
+    }
 
     public function enroll(Course $course)
     {

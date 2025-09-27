@@ -3,7 +3,6 @@
 @section('content')
     <div class="container">
         <h2>All Courses</h2>
-
         @foreach($courses as $course)
             <div class="card mb-3">
                 <div class="card-body">

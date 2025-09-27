@@ -1,45 +1,21 @@
-@extends('layouts.app')
+<div class="mt-4">
+    <h4>Darslar</h4>
 
-@section('content')
-    <div class="container">
-        <h2>{{ $course->title }}</h2>
-        <p>{{ $course->description }}</p>
-        <p><strong>Price:</strong> ${{ $course->price }}</p>
-
-        {{-- Kurs rasmi --}}
-        @if($course->image)
-            <img src="{{ asset('storage/' . $course->image) }}" width="200" class="mb-3 rounded shadow">
-        @endif
-
-        {{-- Enroll tugmasi --}}
-        <div class="my-3">
-            @if(Auth::user()->enrolledCourses->contains($course->id))
-                <button class="btn btn-success" disabled>✅ Enrolled</button>
-            @else
-                <form action="{{ route('student.courses.enroll', $course->id) }}" method="POST">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">📚 Enroll Course</button>
-                </form>
-            @endif
-        </div>
-
-        <h4 class="mt-4">Lessons</h4>
+    @if($course->students->contains(auth()->id()))
         @forelse($course->lessons as $lesson)
             <div class="card mb-2">
-                <div class="card-body">
-                    <h5>{{ $lesson->title }}</h5>
-                    <p>{{ $lesson->description }}</p>
-
-                    @if($lesson->video)
-                        <video width="400" controls>
-                            <source src="{{ asset('storage/' . $lesson->video) }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    @endif
+                <div class="card-body d-flex justify-content-between">
+                    <span>{{ $lesson->title }}</span>
+                    <a href="{{ route('student.courses.lessons.show', [$course->id, $lesson->id]) }}" class="btn btn-sm btn-primary">
+                        📖 O‘qish
+                    </a>
                 </div>
             </div>
         @empty
-            <p class="text-muted">No lessons yet.</p>
+            <p class="text-muted">Hali darslar qo‘shilmagan.</p>
         @endforelse
-    </div>
-@endsection
+    @else
+        <p class="alert alert-warning">📌 Darslarni ko‘rish uchun avval kursga yoziling.</p>
+    @endif
+</div>
+

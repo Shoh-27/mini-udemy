@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Teacher\CourseController;
 use App\Http\Controllers\Teacher\LessonController;
@@ -12,9 +13,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -23,9 +22,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-    Route::get('/', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('dashboard');
 
     // Users
     Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
@@ -49,6 +46,7 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
 
 
 Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\TeacherDashboardController::class, 'index'])->name('dashboard');
     Route::resource('courses', CourseController::class);
     Route::get('courses/{course}/lessons/create', [LessonController::class, 'create'])->name('lessons.create');
     Route::post('courses/{course}/lessons', [LessonController::class, 'store'])->name('lessons.store');
@@ -58,11 +56,14 @@ Route::middleware(['auth', 'role:teacher'])->prefix('teacher')->name('teacher.')
 });
 
 Route::middleware(['auth', 'role:student'])->prefix('student')->name('student.')->group(function () {
-    Route::get('/dashboard', [StudentCourseController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\StudentDashboardController::class, 'index'])->name('dashboard');
     Route::get('/courses', [StudentCourseController::class, 'index'])->name('courses.index');
     Route::get('/courses/{course}', [\App\Http\Controllers\Student\StudentCourseController::class, 'show'])->name('courses.show');
     Route::post('/courses/{course}/enroll', [StudentCourseController::class, 'enroll'])
         ->name('courses.enroll');
+    Route::get('/courses/{course}/lessons/{lesson}', [StudentCourseController::class, 'lesson'])
+        ->name('courses.lessons.show');
+
 });
 
 Route::middleware(['auth', 'role:student|admin'])->group(function () {

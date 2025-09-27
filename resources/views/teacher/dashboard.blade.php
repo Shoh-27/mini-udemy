@@ -11,46 +11,39 @@
 
         <h2 class="mt-5">My Courses</h2>
 
-        @if($courses->isEmpty())
-            <p>You have not created any courses yet.</p>
-        @else
-            <table class="table table-bordered mt-3">
-                <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Lessons</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach($courses as $course)
-                    <tr>
-                        <td>{{ $course->title }}</td>
-                        <td>{{ $course->lessons->count() }}</td>
-                        <td>
-                            @if(isset($course->is_approved) && $course->is_approved)
-                                ✅ Approved
-                            @else
-                                ⏳ Pending Approval
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('teacher.courses.show', $course->id) }}" class="btn btn-sm btn-info">View</a>
-                            <a href="{{ route('teacher.courses.edit', $course->id) }}" class="btn btn-sm btn-warning">Edit</a>
+        @forelse($courses as $course)
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title">{{ $course->title }}</h4>
+                    <p><strong>Lessons:</strong> {{ $course->lessons->count() }}</p>
+                    <p>
+                        <strong>Status:</strong>
+                        @if($course->status === 'approved')
+                            ✅ Approved
+                        @elseif($course->status === 'pending')
+                            ⏳ Pending Approval
+                        @else
+                            ❌ Rejected
+                        @endif
+                    </p>
+                    <p><strong>Enrolled Students:</strong> {{ $course->enrollments->count() }}</p>
 
-                            <form action="{{ route('teacher.courses.destroy', $course->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this course?')">Delete</button>
-                            </form>
+                    <div class="mt-3">
+                        <a href="{{ route('teacher.courses.show', $course->id) }}" class="btn btn-sm btn-info">👁 View</a>
+                        <a href="{{ route('teacher.courses.edit', $course->id) }}" class="btn btn-sm btn-warning">✏️ Edit</a>
 
-                            <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-sm btn-success">+ Add Lesson</a>
-                        </td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        @endif
+                        <form action="{{ route('teacher.courses.destroy', $course->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button class="btn btn-sm btn-danger" onclick="return confirm('Delete this course?')">🗑 Delete</button>
+                        </form>
+
+                        <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-sm btn-success">➕ Add Lesson</a>
+                    </div>
+                </div>
+            </div>
+        @empty
+            <p class="text-muted">You have not created any courses yet.</p>
+        @endforelse
     </div>
 @endsection

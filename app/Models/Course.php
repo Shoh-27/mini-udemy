@@ -37,4 +37,9 @@ class Course extends Model
             ->withTimestamps();
     }
 
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class, 'course_id');
+    }
+
 }
