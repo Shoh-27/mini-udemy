@@ -43,25 +43,34 @@ class LessonController extends Controller
         return view('teacher.lessons.edit', compact('course', 'lesson'));
     }
 
-    public function update(Request $request, Course $course, Lesson $lesson)
+    public function update(Request $request, Lesson $lesson)
     {
-//        $this->authorizeCourse($course);
-
+        // Validate request
         $data = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'video' => 'nullable|mimes:mp4,mov,avi,wmv,webm,ogg|max:51200',
+            'content' => 'nullable|string',
+            'video' => 'nullable|mimes:mp4,mov,avi|max:102400', // max 100MB
         ]);
 
+        // Agar video yuklangan bo‘lsa, eski videoni o‘chirish va yangisini saqlash
         if ($request->hasFile('video')) {
-            $data['video'] = $request->file('video')->store('lessons', 'public');
+            if ($lesson->video) {
+                Storage::delete($lesson->video);
+            }
+            $data['video'] = $request->file('video')->store('lessons');
         }
 
+        // Lessonni yangilash
         $lesson->update($data);
 
-        return redirect()->route('teacher.courses.show', $course->id)
+        // Kurs modelini olish
+        $course = $lesson->course;
+
+        // Teacher dashboard sahifasiga redirect qilish
+        return redirect()->route('teacher.courses.show', $course)
             ->with('success', 'Lesson updated successfully!');
     }
+
 
     public function destroy(Course $course, Lesson $lesson)
     {
