@@ -1,4 +1,3 @@
-# Laravel & PHP
 /vendor
 /node_modules
 /public/hot
@@ -22,6 +21,3 @@ auth.json
 npm-debug.log
 yarn-error.log
 
-# OS specific
-.DS_Store
-Thumbs.db
