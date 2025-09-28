@@ -24,7 +24,7 @@
                             </p>
                         </div>
 
-                        <a href="{{ route('teacher.courses.show', $course->id) }}"
+                        <a href="{{ route('admin.courses.show', $course->id) }}"
                            class="px-3 py-1 bg-blue-500 text-white text-sm rounded-lg shadow hover:bg-blue-600 transition">
                             👁 View
                         </a>

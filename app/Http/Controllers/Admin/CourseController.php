@@ -28,21 +28,7 @@ class CourseController extends Controller
 
     public function show(Course $course)
     {
-        $user = auth()->user();
-
-        // Agar admin bo‘lsa → barcha kurslarni ko‘rishi mumkin
-        if ($user->hasRole('admin')) {
-            return view('teacher.courses.show', compact('course'));
-        }
-
-        // Teacher bo‘lsa → faqat o‘z kursini ko‘rishi mumkin
-        if ($user->hasRole('teacher')) {
-            $this->authorizeCourse($course);
-            return view('teacher.courses.show', compact('course'));
-        }
-
-        // Student yoki boshqa rolga → ruxsat yo‘q
-        abort(403, 'Sizga bu sahifani ko‘rishga ruxsat berilmagan.');
+        return view('admin.courses.show', compact('course'));
     }
 
 }

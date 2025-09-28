@@ -12,13 +12,13 @@ class LessonController extends Controller
 {
     public function create(Course $course)
     {
-        $this->authorizeCourse($course);
+//        $this->authorizeCourse($course);
         return view('teacher.lessons.create', compact('course'));
     }
 
     public function store(Request $request, Course $course)
     {
-        $this->authorizeCourse($course);
+//        $this->authorizeCourse($course);
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -39,13 +39,13 @@ class LessonController extends Controller
 
     public function edit(Course $course, Lesson $lesson)
     {
-        $this->authorizeCourse($course);
+//        $this->authorizeCourse($course);
         return view('teacher.lessons.edit', compact('course', 'lesson'));
     }
 
     public function update(Request $request, Course $course, Lesson $lesson)
     {
-        $this->authorizeCourse($course);
+//        $this->authorizeCourse($course);
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -65,17 +65,11 @@ class LessonController extends Controller
 
     public function destroy(Course $course, Lesson $lesson)
     {
-        $this->authorizeCourse($course);
+//        $this->authorizeCourse($course);
         $lesson->delete();
 
         return redirect()->route('teacher.courses.show', $course->id)
             ->with('success', 'Lesson deleted successfully!');
     }
 
-    private function authorizeCourse(Course $course)
-    {
-        if ($course->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
-    }
 }
