@@ -10,11 +10,6 @@ class Lesson extends Model
         'title', 'content', 'video', 'course_id'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function course()
     {
         return $this->belongsTo(Course::class);
