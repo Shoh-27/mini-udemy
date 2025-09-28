@@ -1,61 +1,57 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h2>{{ $course->title }}</h2>
-        <p>{{ $course->description }}</p>
-        <p><strong>Price:</strong> ${{ $course->price }}</p>
+    <div>
+        <!-- Kurs ma'lumotlari -->
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">{{ $course->title }}</h2>
+        <p class="text-gray-700 mb-2">{{ $course->description }}</p>
+        <p class="text-lg font-semibold text-indigo-600 mb-4">💲 Narxi: ${{ $course->price }}</p>
 
         @if($course->image)
-            <img src="{{ asset('storage/' . $course->image) }}" width="200" class="mb-3 rounded shadow">
+            <img src="{{ asset('storage/' . $course->image) }}" alt="Course Image" class="w-64 rounded shadow mb-6">
         @endif
-
-        {{-- ✅ Student uchun Enroll tugmasi --}}
-        @role('student')
-        @if(!$course->students->contains(auth()->id()))
-            <form action="{{ route('student.courses.enroll', $course->id) }}" method="POST" class="mb-3">
-                @csrf
-                <button type="submit" class="btn btn-success">📚 Enroll Course</button>
-            </form>
-        @else
-            <p class="text-success">✅ Siz bu kursga yozilgansiz</p>
-        @endif
-        @endrole
-
-        <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
-            <h4>Lessons ({{ $course->lessons->count() }})</h4>
+        <!-- Lessons -->
+        <div class="flex items-center justify-between mb-4">
+            <h4 class="text-xl font-semibold text-gray-800">📖 Darslar ({{ $course->lessons->count() }})</h4>
 
             @role('teacher')
-            <a href="{{ route('teacher.lessons.create', $course->id) }}" class="btn btn-primary">➕ Add Lesson</a>
+            <a href="{{ route('teacher.lessons.create', $course->id) }}"
+               class="px-4 py-2 bg-indigo-500 text-white rounded-md shadow hover:bg-indigo-600">
+                ➕ Yangi dars qo‘shish
+            </a>
             @endrole
         </div>
 
+        <!-- Lesson list -->
         @forelse($course->lessons as $lesson)
-            <div class="card mb-3 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ $lesson->title }}</h5>
-                    <p class="card-text">{{ $lesson->description }}</p>
+            <div class="bg-white border rounded-lg shadow-sm p-4 mb-4">
+                <h5 class="text-lg font-bold text-gray-900">{{ $lesson->title }}</h5>
+                <p class="text-gray-600 mb-2">{{ $lesson->description }}</p>
 
-                    @if($lesson->video)
-                        <video width="500px" height="500px" controls class="mt-2 rounded">
-                            <source src="{{ asset('storage/' . $lesson->video) }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    @endif
+                @if($lesson->video)
+                    <video controls class="w-full max-w-xl rounded shadow my-3">
+                        <source src="{{ asset('storage/' . $lesson->video) }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                @endif
 
-                    @role('teacher')
-                    <div class="mt-3">
-                        <a href="{{ route('teacher.lessons.edit', $lesson->id) }}" class="btn btn-warning btn-sm">✏️ Edit</a>
-                        <form action="{{ route('teacher.lessons.destroy', $lesson->id) }}" method="POST" class="d-inline">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-danger btn-sm" onclick="return confirm('Delete this lesson?')">🗑️ Delete</button>
-                        </form>
-                    </div>
-                    @endrole
+                <div class="flex space-x-2 mt-3">
+                    <a href="{{ route('teacher.lessons.edit', $lesson->id) }}"
+                       class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 text-sm">
+                        ✏️ Tahrirlash
+                    </a>
+                    <form action="{{ route('teacher.lessons.destroy', $lesson->id) }}" method="POST"
+                          onsubmit="return confirm('Bu darsni o‘chirishni xohlaysizmi?')">
+                        @csrf @method('DELETE')
+                        <button type="submit"
+                                class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-sm">
+                            🗑️ O‘chirish
+                        </button>
+                    </form>
                 </div>
             </div>
         @empty
-            <p class="text-muted">No lessons added yet.</p>
+            <p class="text-gray-500 italic">📌 Hali darslar qo‘shilmagan.</p>
         @endforelse
     </div>
 @endsection

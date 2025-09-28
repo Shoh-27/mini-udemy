@@ -55,6 +55,11 @@ class User extends Authenticatable
         });
     }
 
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
     public function courses()
     {
         return $this->hasMany(Course::class);

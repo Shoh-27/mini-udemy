@@ -46,6 +46,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     // Categories
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     Route::get('/courses', [AdminCourseController::class, 'index'])->name('courses.index');
+    Route::get('courses/{course}', [CourseController::class, 'show'])->name('courses.show');
 });
 
 

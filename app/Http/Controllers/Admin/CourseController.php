@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourseController extends Controller
 {
@@ -24,4 +25,24 @@ class CourseController extends Controller
         $course->update(['status' => 'rejected']);
         return back()->with('error', 'Course rejected!');
     }
+
+    public function show(Course $course)
+    {
+        $user = auth()->user();
+
+        // Agar admin bo‘lsa → barcha kurslarni ko‘rishi mumkin
+        if ($user->hasRole('admin')) {
+            return view('teacher.courses.show', compact('course'));
+        }
+
+        // Teacher bo‘lsa → faqat o‘z kursini ko‘rishi mumkin
+        if ($user->hasRole('teacher')) {
+            $this->authorizeCourse($course);
+            return view('teacher.courses.show', compact('course'));
+        }
+
+        // Student yoki boshqa rolga → ruxsat yo‘q
+        abort(403, 'Sizga bu sahifani ko‘rishga ruxsat berilmagan.');
+    }
+
 }
