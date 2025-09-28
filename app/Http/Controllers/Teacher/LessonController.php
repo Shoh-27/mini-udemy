@@ -74,11 +74,13 @@ class LessonController extends Controller
 
     public function destroy(Course $course, Lesson $lesson)
     {
-//        $this->authorizeCourse($course);
+        // Lesson o'chiriladi
         $lesson->delete();
 
-        return redirect()->route('teacher.courses.show', $course->id)
+        // Teacher kurs sahifasiga redirect
+        return redirect()->route('teacher.courses.show', $course)
             ->with('success', 'Lesson deleted successfully!');
     }
+
 
 }
